@@ -10,8 +10,6 @@ if (mysqli_connect_errno()) {
 	// If there is an error with the connection, stop the script and display the error.
 	header("Location: index.php?registererror=connectionfailed");
 	exit();
-	
-	//exit('Failed to connect to MySQL: ' . mysqli_connect_error());
 }
 // Now we check if the data was submitted, isset() function will check if the data exists.
 if (!isset($_POST['username'], $_POST['password'], $_POST['retypepassword'])) {

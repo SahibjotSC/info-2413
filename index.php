@@ -78,7 +78,6 @@
 					<button type="button" class="toggle-button" onclick="login()">Login</button>
 					<button type="button" class="toggle-button" onclick="register()">Register</button>
 				</div>
-				<script>register();</script>
 				<form id="login" class="input-group" action="login.php" method="post">
 					<input type="text" class="input-field" placeholder="Username" name="username" required value=<?php echo $username; ?>>
 					<input type="password" class="input-field" placeholder="Password" name="password" required>
