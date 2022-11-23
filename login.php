@@ -9,13 +9,13 @@ $DATABASE_NAME = 'phplogin';
 $con = mysqli_connect($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
 if ( mysqli_connect_errno() ) {
 	// If there is an error with the connection, stop the script and display the error.
-	header("Location: index.php?loginerror=sqlfail");
+	header("Location: index.php?login=sqlfail");
 	exit();
 }
 // Now we check if the data from the login form was submitted, isset() will check if the data exists.
 if ( !isset($_POST['username'], $_POST['password']) ) {
 	// Could not get the data that should have been sent.
-	header("Location: index.php?loginerror=missingvalues");
+	header("Location: index.php?login=missingvalues");
 	exit();
 }
 // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
@@ -41,11 +41,11 @@ if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?'
 			header('Location: home.php');
 		} else {
 			// Incorrect password
-			header("Location: index.php?loginerror=incorrect&username=".$_POST['username']);
+			header("Location: index.php?login=incorrect&username=".$_POST['username']);
 		}
 	} else {
 		// Incorrect username
-		header("Location: index.php?loginerror=incorrect&username=".$_POST['username']);
+		header("Location: index.php?login=incorrect&username=".$_POST['username']);
 	}
 	
 	$stmt->close();

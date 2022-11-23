@@ -9,7 +9,7 @@ if (!isset($_SESSION['loggedin'])) {
 
 $con = mysqli_connect('localhost', 'root', '', 'phplogin');
 if (mysqli_connect_errno()) {
-	header("Location: home.php?registererror=connectionfailed");
+	header("Location: home.php?error=connectionfailed");
 	exit();
 }
 if ($stmt = $con->prepare('SELECT * FROM categories')) {
@@ -19,7 +19,71 @@ if ($stmt = $con->prepare('SELECT * FROM categories')) {
 		$array[] = $row['name'];
 	}
 	$stmt->close();
-} else header("Location: home.php?signup=failed");
+} else header("Location: home.php?error=failed");
+
+$homeType = '';
+$message = '';
+
+if(isset($_GET['category']))
+{
+	$homeType = 'category';
+	if($_GET['category'] == 'connectionfailed')
+	{
+		$message = '<h6 class="error">*Failed to connect to MySQL</h6>';
+	}
+	else if ($_GET['category'] == 'incomplete')
+	{
+		$message = '<h6 class="error">*Please input all required values</h6>';
+	}
+	else if ($_GET['category'] == 'empty')
+	{
+		$message = '<h6 class="error">*Please input all required values</h6>';
+	}
+	else if ($_GET['category'] == 'catagrydoesexist')
+	{
+		$message = '<h6 class="error">*Catagory does not exist</h6>';
+	}
+	else if ($_GET['category'] == 'failed')
+	{
+		$message = '<h6 class="error">*Catagory update failed</h6>';
+	}
+	else if ($_GET['category'] == 'success')
+	{
+		$message = '<h6 class="success">*Catagory update successful</h6>';
+	}
+}
+else if(isset($_GET['change']))
+{
+	$homeType = 'change';
+	if($_GET['change'] == 'connectionfailed')
+	{
+		$message = '<h6 class="error">*Failed to connect to MySQL</h6>';
+	}
+	else if ($_GET['change'] == 'incomplete')
+	{
+		$message = '<h6 class="error">*Please input all required values</h6>';
+	}
+	else if ($_GET['change'] == 'empty')
+	{
+		$message = '<h6 class="error">*Please input all required values</h6>';
+	}
+	else if ($_GET['change'] == 'incorrecttype')
+	{
+		$message = '<h6 class="error">*Error with type of change</h6>';
+	}
+	else if ($_GET['change'] == 'catagrydoesntexist')
+	{
+		$message = '<h6 class="error">*Catagory does not exist</h6>';
+	}
+	else if ($_GET['change'] == 'failed')
+	{
+		$message = '<h6 class="error">*Update failed</h6>';
+	}
+	else if ($_GET['change'] == 'success')
+	{
+		$message = '<h6 class="success">*Update successful</h6>';
+	}
+}
 ?>
 
 <!DOCTYPE html>
@@ -39,6 +103,119 @@ if ($stmt = $con->prepare('SELECT * FROM categories')) {
 					<a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
 				</div>
 			</nav>
+			<div class="content">
+				<h2>Home Page</h2>
+				<p>Welcome back, <?=$_SESSION['name']?>!</p>
+			</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="outer-container">
+<div id="container">
+	<h1>Expenses/Income</h1>
+
+	<table class="sortable">
+	    <thead>
+		<tr>
+			<th>Description</th>
+			<th>Value</th>
+			<th>Catagory</th>
+			<th>Date Modified</th>
+			<th>User</th>
+		</tr>
+	    </thead>
+	    <tbody>
+<?php
+	// Adds pretty filesizes
+	function pretty_filesize($file) {
+		$size=filesize($file);
+		if($size<1024){$size=$size." Bytes";}
+		elseif(($size<1048576)&&($size>1023)){$size=round($size/1024, 1)." KB";}
+		elseif(($size<1073741824)&&($size>1048575)){$size=round($size/1048576, 1)." MB";}
+		else{$size=round($size/1073741824, 1)." GB";}
+		return $size;
+	}
+
+	 // Opens directory
+	$con = mysqli_connect('localhost', 'root', '', 'phplogin');
+	if ($stmt = $con->prepare('SELECT * FROM changes')) {
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$indexCount = $result->num_rows;
+		if($indexCount > 0) {
+			while($row = $result->fetch_assoc()) {
+				$description[] = $row['description'];
+				$value[] = $row['value'];
+				$type[] = $row['type'];
+				$category[] = $row['category'];
+				$changesID[] = $row['changesID'];
+				$dateOf[] = $row['dateOf'];
+				$accountID[] = $row['accountID'];
+			}
+		}
+		//header("Location: home.php?error=failed".$indexCount);
+		//$indexCount = 10;
+			
+
+	for($index=0; $index < $indexCount; $index++) {
+		$name=$description[$index];
+		
+		if ($stmtt = $con->prepare('SELECT * FROM accounts where ?')) {
+			$stmtt->bind_param('s', $accountID[$index]);
+			$stmtt->execute();
+			$result = $stmtt->get_result();
+			while($row2 = $result->fetch_assoc()) {
+				$accountName[] = $row2['username'];
+			}
+		}
+
+		echo("
+		<tr class='file'>
+			<td><a class='name'>$description[$index]</a></td>
+			<td><a class='name'>$value[$index]</a></td>
+			<td><a class='name'>$category[$index]</a></td>
+			<td><a class='name'>$dateOf[$index]</a></td>
+			<td><a class='name'>$accountName[$index]</a></td>
+		</tr>");
+	}
+
+
+
+
+
+		$stmt->close();
+	} else header("Location: home.php?error=failed");
+	?>
+
+	    </tbody>
+	</table>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			<div class="inner-fabs">
 				<div class="fab round change-category" id="fab4" data-tooltip="Add Category"><img src="tag.png" width="38px" height="38px"></div>
 				<div class="fab round change-trigger" id="fab3" data-tooltip="Add Expense/Income"><img src="change.png" width="38px" height="38px"></div>
@@ -70,6 +247,7 @@ if ($stmt = $con->prepare('SELECT * FROM categories')) {
 				<div class="modal-content" >
 					<span class="close-button"></span>
 					<div class="add">
+						<?php if ($homeType == 'change') echo $message; ?>
 						<div class="add__container">
 							<form id="login" action="submit_change.php" method="post">
 								<select class="add__type" name="type">
@@ -84,8 +262,8 @@ if ($stmt = $con->prepare('SELECT * FROM categories')) {
 									}
 									?>
 								</select>
-								<input type="text" class="add__description" name="description" placeholder="Add description">
-								<input type="number" class="add__value" name="value" placeholder="Value">
+								<input type="text" class="add__description" name="description" placeholder="Add description" required>
+								<input type="number" class="add__value" name="value" placeholder="Value" required>
 								
 								<input type="submit" class="add__btn" type='button' value="UPDATE">
 							</form>
@@ -97,12 +275,23 @@ if ($stmt = $con->prepare('SELECT * FROM categories')) {
 				<div class="modal-content" >
 					<span class="close-button"></span>
 					<div class="add">
+						<?php if ($homeType == 'category') echo $message; ?>
 						<div class="add__container">
 							<form id="login" action="submit_category.php" method="post">
-								<input type="text" class="add__description" name="name" placeholder="Category Name">
+								<input type="text" class="add__description" name="name" placeholder="Category Name" required>
 								<input type="text" class="add__description" name="description" placeholder="Description">
-								
 								<input type="submit" class="add__btn" type='button' value="ADD CATEGORY">
+							</form>
+							<form id="login" action="remove_category.php" method="post">
+								<select class="add__type" name="category">
+									<?php
+									foreach ($array as $row)
+									{
+										echo "<option value=", $row, " selected>", $row, "</option>";
+									}
+									?>
+								</select>
+								<input type="submit" class="add__btn" type='button' value="REMOVE CATEGORY">
 							</form>
 						</div>
 					</div>
@@ -135,10 +324,10 @@ if ($stmt = $con->prepare('SELECT * FROM categories')) {
 				categoryTrigger.addEventListener("click", toggleCategory);
 				window.addEventListener("click", windowOnClick);
 			</script>
-			<div class="content">
-				<h2>Home Page</h2>
-				<p>Welcome back, <?=$_SESSION['name']?>!</p>
-			</div>
 		</div>
+		<?php 
+		if ($homeType == 'change') echo '<script type="text/javascript"> toggleChange(); </script>';
+		else if ($homeType == 'category') echo '<script type="text/javascript"> toggleCategory(); </script>';
+		?>
 	</body>
 </html>

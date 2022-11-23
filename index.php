@@ -12,63 +12,61 @@
 
 		if ($_GET['username'] ?? null) $username = $_GET['username'];
 
-		if(isset($_GET['loginerror']))
+		if(isset($_GET['login']))
 		{
 			$type = 'login';
-			if($_GET['loginerror'] == 'sqlfail')
+			if($_GET['login'] == 'sqlfail')
 			{
 				$message = '<h6 class="error">*Failed to connect to MySQL</h6>';
 			}
-			else if ($_GET['loginerror'] == 'missingvalues')
+			else if ($_GET['login'] == 'missingvalues')
 			{
 				$message = '<h6 class="error">*Please input all required values</h6>';
 			}
-			else if ($_GET['loginerror'] == 'incorrect')
+			else if ($_GET['login'] == 'incorrect')
 			{
 				$message = '<h6 class="error">*Incorrect username and/or password</h6>';
 			}
 		}
-		else if(isset($_GET['registererror']))
+		else if(isset($_GET['register']))
 		{
 			$type = 'register';
-			if($_GET['registererror'] == 'connectionfailed')
+			if($_GET['register'] == 'connectionfailed')
 			{
 				$message = '<h6 class="error">*Failed to connect to MySQL</h6>';
 			}
-			else if ($_GET['registererror'] == 'incomplete')
+			else if ($_GET['register'] == 'incomplete')
 			{
 				$message = '<h6 class="error">*Please complete the registration form</h6>';
 			}
-			else if ($_GET['registererror'] == 'empty')
+			else if ($_GET['register'] == 'empty')
 			{
 				$message = '<h6 class="error">*Please complete the registration form</h6>';
 			}
-			else if ($_GET['registererror'] == 'invalidusername')
+			else if ($_GET['register'] == 'invalidusername')
 			{
 				$message = '<h6 class="error">*Invalid Username</h6>';
 			}
-			else if ($_GET['registererror'] == 'retypepass')
+			else if ($_GET['register'] == 'retypepass')
 			{
 				$message = '<h6 class="error">*Passwords do not match</h6>';
 			}
-			else if ($_GET['registererror'] == 'passwordlength')
+			else if ($_GET['register'] == 'passwordlength')
 			{
 				$message = '<h6 class="error">*Password must be between 5 and 20 characters long</h6>';
 			}
-			else if ($_GET['registererror'] == 'userexist')
+			else if ($_GET['register'] == 'userexist')
 			{
 				$message = '<h6 class="error">*Username exists, please choose another</h6>';
 			}
-		}
-		else if (isset($_GET['signup']) == 'success')
-		{
-			$type = 'register';
-			$message = '<h6 class="success">*Signup Successful. Please login</h6>';
-		}
-		else if (isset($_GET['signup']) == 'failed')
-		{
-			$type = 'register';
-			$message = '<h6 class="error">*Signup Failed</h6>';
+			else if ($_GET['register'] == 'failed')
+			{
+				$message = '<h6 class="error">*Signup Failed</h6>';
+			}
+			else if ($_GET['register'] == 'success')
+			{
+				$message = '<h6 class="success">*Signup Successful. Please login</h6>';
+			}
 		}
 		?>
 		<div class="hero">

@@ -22,13 +22,13 @@ if (mysqli_connect_errno()) {
 	exit();
 }
 // Now we check if the data was submitted, isset() function will check if the data exists.
-if (!isset($_POST['name'], $_POST['description'])) {
+if (!isset($_POST['category'])) {
 	// Could not get the data that should have been sent.
 	header("Location: home.php?category=incomplete");
 	exit();
 }
 // Make sure the submitted registration values are not empty.
-if ($_POST['name'] == "") {
+if ($_POST['category'] == "") {
 	// One or more values are empty.
 	header("Location: home.php?category=empty");
 	exit();
@@ -39,11 +39,8 @@ if ($stmt = $con->prepare('SELECT * FROM categories WHERE name = ?')) {
 	$stmt->store_result();
 	// Store the result so we can check if the account exists in the database.
 	if ($stmt->num_rows > 0) {
-		header("Location: home.php?category=catagrydoesexist");
-	} else {
-		// Username doesnt exists, insert new account
-		if ($stmtt = $con->prepare('INSERT INTO categories (name, description) VALUES (?, ?)')) {
-			$stmtt->bind_param('ss', $_POST['name'], $_POST['description']);
+		if ($stmtt = $con->prepare('DELETE FROM categories WHERE name = ?')) {
+			$stmtt->bind_param('s', $_POST['category']);
 			$stmtt->execute();
 			header("Location: home.php?category=success");
 			$stmt->close();
@@ -51,6 +48,9 @@ if ($stmt = $con->prepare('SELECT * FROM categories WHERE name = ?')) {
 			// Something is wrong with the sql statement, check to make sure accounts table exists with all 3 fields.
 			header("Location: home.php?category=failed");
 		}
+	} else {
+		header("Location: home.php?category=catagrydoesnotexist");
+		// Username doesnt exists
 	}
 	$stmt->close();
 } else {
