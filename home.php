@@ -93,6 +93,7 @@ else if(isset($_GET['change']))
 		<title>Home Page</title>
 		<link rel="stylesheet" href="style.css">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+		<script src="sorttable.js"></script>
 	</head>
 	<body>
 		<div class="hero">
@@ -125,6 +126,7 @@ else if(isset($_GET['change']))
 	<table class="sortable">
 	    <thead>
 		<tr>
+			<th>Type</th>
 			<th>Description</th>
 			<th>Value</th>
 			<th>Catagory</th>
@@ -134,17 +136,6 @@ else if(isset($_GET['change']))
 	    </thead>
 	    <tbody>
 <?php
-	// Adds pretty filesizes
-	function pretty_filesize($file) {
-		$size=filesize($file);
-		if($size<1024){$size=$size." Bytes";}
-		elseif(($size<1048576)&&($size>1023)){$size=round($size/1024, 1)." KB";}
-		elseif(($size<1073741824)&&($size>1048575)){$size=round($size/1048576, 1)." MB";}
-		else{$size=round($size/1073741824, 1)." GB";}
-		return $size;
-	}
-
-	 // Opens directory
 	$con = mysqli_connect('localhost', 'root', '', 'phplogin');
 	if ($stmt = $con->prepare('SELECT * FROM changes')) {
 		$stmt->execute();
@@ -176,15 +167,21 @@ else if(isset($_GET['change']))
 				$accountName[] = $row2['username'];
 			}
 		}
+		
+		if ($type[$index] == "inc") $typeIcon = "plus";
+		else if ($type[$index] == "exp") $typeIcon = "minus";
+		else $typeIcon = "";
 
 		echo("
-		<tr class='file'>
+		<tr class='file $typeIcon'>
+			<td><a class='name'>$typeIcon</a></td>
 			<td><a class='name'>$description[$index]</a></td>
 			<td><a class='name'>$value[$index]</a></td>
 			<td><a class='name'>$category[$index]</a></td>
 			<td><a class='name'>$dateOf[$index]</a></td>
 			<td><a class='name'>$accountName[$index]</a></td>
-		</tr>");
+		</tr>
+		");
 	}
 
 

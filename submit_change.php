@@ -54,7 +54,7 @@ if ($stmt = $con->prepare('SELECT * FROM categories WHERE name = ?')) {
 				if ($stmtt = $con->prepare('INSERT INTO changes (description, value, type, category, accountID) VALUES (?, ?, ?, ?, ?)')) {
 					$stmtt->bind_param('sdsss', $_POST['description'], $_POST['value'], $_POST['type'], $_POST['category'], $idk[0]);
 					$stmtt->execute();
-					header("Location: home.php?change=success".$_SESSION['name'].$idk[0]);
+					header("Location: home.php");
 				}
 				else {
 					header("Location: home.php?change=failed");

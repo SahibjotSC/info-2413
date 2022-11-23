@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 23, 2022 at 01:30 AM
+-- Generation Time: Nov 24, 2022 at 12:33 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -60,6 +60,7 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`name`, `description`) VALUES
+('CustomCategoryyyyyy', ''),
 ('dasd', ''),
 ('fdgg', 'gfdgfg'),
 ('fds', '2323233232'),
@@ -67,6 +68,8 @@ INSERT INTO `categories` (`name`, `description`) VALUES
 ('fsdfds', '45rfgdsfg'),
 ('fsdfsd', '34fesdfds'),
 ('gdffdg', 'gfdgfd'),
+('OOOOOOOOOOOOOOOOOOOOOOOOOOOO', ''),
+('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO', ''),
 ('rrewrew', 'rewrewrewrew'),
 ('z', 'z');
 
@@ -95,7 +98,12 @@ INSERT INTO `changes` (`description`, `value`, `type`, `category`, `changesID`, 
 ('fsdfds', 43, 'inc', 'z', 22, '2022-11-22', 1),
 ('fdcfds', 3443, 'inc', 'z', 23, '2022-11-22', 1),
 ('dsdaasd', 222, 'inc', 'z', 24, '2022-11-22', 1),
-('faaaaaaaa', 232323, 'inc', 'z', 25, '2022-11-22', 4);
+('faaaaaaaa', 232323, 'inc', 'z', 25, '2022-11-22', 4),
+('TESTTTTTTT', 9999, 'inc', 'CustomCategoryyyyyy', 26, '2022-11-22', 4),
+('dsad', 43434, 'exp', 'dasd', 27, '2022-11-22', 4),
+('dfsfdfsd', 434, 'exp', 'dasd', 28, '2022-11-22', 4),
+('dasdasdasd', 1343, 'inc', 'OOOOOOOOOOOOOOOOOOOOOOOOOOOO', 29, '2022-11-22', 4),
+('fsdf', 4, 'inc', 'OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO', 30, '2022-11-22', 4);
 
 -- --------------------------------------------------------
 
@@ -158,7 +166,7 @@ ALTER TABLE `accounts`
 -- AUTO_INCREMENT for table `changes`
 --
 ALTER TABLE `changes`
-  MODIFY `changesID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `changesID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `personal_information`

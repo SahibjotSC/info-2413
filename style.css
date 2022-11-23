@@ -384,9 +384,10 @@ span{
 
 .outer-container {
 	color: #333;
-	font: 14px Sans-Serif;
-	padding: 50px;
 	background: #eee;
+	width: 50%;
+	height: 50%;
+	margin: auto;
 }
 
 h1 {
@@ -404,6 +405,10 @@ h2 {
 	box-shadow: 0 5px 10px -5px rgba(0,0,0,0.5);
 	position: relative;
 	background: white; 
+	width: 99%;
+	height: 99%;
+	margin: auto;
+	min-height: 10px;
 }
 
 table {
@@ -414,10 +419,15 @@ table {
 }
 
 th {
-	background-color: #FE4902;
+	background-color: #000000;
 	color: #FFF;
 	cursor: pointer;
 	padding: 5px 10px;
+}
+
+th span {
+	position:relative;
+    top:-2px;
 }
 
 th small {
@@ -450,10 +460,22 @@ th:first-of-type {
 
 td:not(:first-of-type) a {
 	background-image: none !important;
-} 
+}
 
-tr:nth-of-type(odd) {
-	background-color: #E6E6E6;
+tr.plus:nth-of-type(odd) {
+	background-color: #8BBD8B;
+}
+
+tr.plus:nth-of-type(even) {
+	background-color: #A4D6A4;
+}
+
+tr.minus:nth-of-type(odd) {
+	background-color: #BD8B8B;
+}
+
+tr.minus:nth-of-type(even) {
+	background-color: #D6A4A4;
 }
 
 tr:hover td {
@@ -464,9 +486,16 @@ tr:hover td a {
 	color: #000;
 }
 
-table tr td:first-of-type a[href$=".plus"]
-{background-image: url(up.png);}
+.name {
+	background-repeat: no-repeat;
+}
 
-/* zips */
-table tr td:first-of-type a[href$=".minus"] 
-{background-image: url(down.png);}
+.plus {
+	background-image: url(up.png);
+	background-repeat: no-repeat;
+}
+
+.minus {
+	background-image: url(down.png);
+	background-repeat: no-repeat;
+}
