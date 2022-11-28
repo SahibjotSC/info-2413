@@ -21,6 +21,25 @@ if ($stmt = $con->prepare('SELECT * FROM categories')) {
 	$stmt->close();
 } else header("Location: home.php?error=failed");
 
+if ($stmt = $con->prepare('SELECT * FROM accounts where username = ?')) {
+	$stmt->bind_param('s', $_SESSION['name']);
+	$stmt->execute();
+	foreach ($stmt->get_result() as $row)
+	{
+		$superuser = $row['superuser'];
+	}
+	$stmt->close();
+}
+
+if ($stmt = $con->prepare('SELECT * FROM changes')) {
+	$stmt->execute();
+	$stmt->store_result();
+	if ($superuser == 1 && $stmt->num_rows < 1) {
+		$startBudget = 0;
+	} else $startBudget = 1;
+	$stmt->close();
+} else header("Location: home.php?error=failed");
+
 $homeType = '';
 $message = '';
 
@@ -107,117 +126,102 @@ else if(isset($_GET['change']))
 			<div class="content">
 				<h2>Home Page</h2>
 				<p>Welcome back, <?=$_SESSION['name']?>!</p>
+				<?php
+				if ($startBudget == 0) {
+					echo ("
+						<div class='add'>
+							<div class='add__container'>
+								<form id='login' action='submit_change.php' method='post'>
+									<select class='hide' name='type'>
+										<option value='inc' selected></option>
+									</select>
+									<select class='hide' name='category'>
+										<option value='None' selected></option>
+									</select>
+									<input type='text' class='hide' name='description' value='Initial Budget'>
+
+									<input type='number' class='add__value' name='value' placeholder='Value' required>
+									<input type='submit' class='add__btn' type='button' value='UPDATE'>
+								</form>
+							</div>
+						</div>
+					");
+				}
+				?>
 			</div>
+			<div class="outer-container">
+				<div id="container">
+					<h1>Expenses/Income</h1>
 
+					<table class="sortable">
+						<thead>
+						<tr>
+							<th>Type</th>
+							<th>Description</th>
+							<th>Value</th>
+							<th>Catagory</th>
+							<th>Date Modified</th>
+							<th>User</th>
+						</tr>
+						</thead>
+						<tbody>
+						<?php
+						$con = mysqli_connect('localhost', 'root', '', 'phplogin');
+						if ($stmt = $con->prepare('SELECT * FROM changes')) {
+							$stmt->execute();
+							$result = $stmt->get_result();
+							$indexCount = $result->num_rows;
+							if($indexCount > 0) {
+								while($row = $result->fetch_assoc()) {
+									$description[] = $row['description'];
+									$value[] = $row['value'];
+									$type[] = $row['type'];
+									$category[] = $row['category'];
+									$changesID[] = $row['changesID'];
+									$dateOf[] = $row['dateOf'];
+									$accountName[] = $row['accountName'];
+								}
+							}
+							//header("Location: home.php?error=failed".$indexCount);
+							//$indexCount = 10;
+								
 
+						for($index=0; $index < $indexCount; $index++) {
+							$name=$description[$index];
+							
+							if ($type[$index] == "inc") $typeIcon = "plus";
+							else if ($type[$index] == "exp") $typeIcon = "minus";
+							else $typeIcon = "";
 
-
-
-
-
-
-
-
-
-<div class="outer-container">
-<div id="container">
-	<h1>Expenses/Income</h1>
-
-	<table class="sortable">
-	    <thead>
-		<tr>
-			<th>Type</th>
-			<th>Description</th>
-			<th>Value</th>
-			<th>Catagory</th>
-			<th>Date Modified</th>
-			<th>User</th>
-		</tr>
-	    </thead>
-	    <tbody>
-<?php
-	$con = mysqli_connect('localhost', 'root', '', 'phplogin');
-	if ($stmt = $con->prepare('SELECT * FROM changes')) {
-		$stmt->execute();
-		$result = $stmt->get_result();
-		$indexCount = $result->num_rows;
-		if($indexCount > 0) {
-			while($row = $result->fetch_assoc()) {
-				$description[] = $row['description'];
-				$value[] = $row['value'];
-				$type[] = $row['type'];
-				$category[] = $row['category'];
-				$changesID[] = $row['changesID'];
-				$dateOf[] = $row['dateOf'];
-				$accountID[] = $row['accountID'];
-			}
-		}
-		//header("Location: home.php?error=failed".$indexCount);
-		//$indexCount = 10;
-			
-
-	for($index=0; $index < $indexCount; $index++) {
-		$name=$description[$index];
-		
-		if ($stmtt = $con->prepare('SELECT * FROM accounts where ?')) {
-			$stmtt->bind_param('s', $accountID[$index]);
-			$stmtt->execute();
-			$result = $stmtt->get_result();
-			while($row2 = $result->fetch_assoc()) {
-				$accountName[] = $row2['username'];
-			}
-		}
-		
-		if ($type[$index] == "inc") $typeIcon = "plus";
-		else if ($type[$index] == "exp") $typeIcon = "minus";
-		else $typeIcon = "";
-
-		echo("
-		<tr class='file $typeIcon'>
-			<td><a class='name'>$typeIcon</a></td>
-			<td><a class='name'>$description[$index]</a></td>
-			<td><a class='name'>$value[$index]</a></td>
-			<td><a class='name'>$category[$index]</a></td>
-			<td><a class='name'>$dateOf[$index]</a></td>
-			<td><a class='name'>$accountName[$index]</a></td>
-		</tr>
-		");
-	}
-
-
-
-
-
-		$stmt->close();
-	} else header("Location: home.php?error=failed");
-	?>
-
-	    </tbody>
-	</table>
-</div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			<div class="inner-fabs">
-				<div class="fab round change-category" id="fab4" data-tooltip="Add Category"><img src="tag.png" width="38px" height="38px"></div>
-				<div class="fab round change-trigger" id="fab3" data-tooltip="Add Expense/Income"><img src="change.png" width="38px" height="38px"></div>
+							echo("
+							<tr class='file $typeIcon''>
+								<td><a class='name hidden $typeIcon'>$typeIcon</a></td>
+								<td><a class='name'>$description[$index]</a></td>
+								<td><a class='name'>$value[$index]</a></td>
+								<td><a class='name'>$category[$index]</a></td>
+								<td><a class='name'>$dateOf[$index]</a></td>
+								<td><a class='name'>$accountName[$index]</a></td>
+							</tr>"
+							);
+						}
+						$stmt->close();
+						} else header("Location: home.php?error=failed");
+						?>
+						</tbody>
+					</table>
+				</div>
 			</div>
-			<div class="fab round" id="fab1"><img src="+.png" id="fabIcon" width="56px" height="56px"></div>
+			<?php
+			if ($startBudget != 0) {
+				echo "
+				<div class='inner-fabs'>
+					<div class='fab round change-category' id='fab4' data-tooltip='Add Category'><img src='tag.png' width='38px' height='38px'></div>
+					<div class='fab round change-trigger' id='fab3' data-tooltip='Add Expense/Income'><img src='change.png' width='38px' height='38px'></div>
+				</div>
+				<div class='fab round' id='fab1'><img src='+.png' id='fabIcon' width='56px' height='56px'></div>
+				";
+			}
+			?>
 			<script>
 				let fab1 = document.getElementById("fab1");
 				let innerFabs = document.getElementsByClassName("inner-fabs")[0];

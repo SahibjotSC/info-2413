@@ -47,10 +47,11 @@ if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?'
 		header("Location: index.php?register=userexist");
 	} else {
 		// Username doesnt exists, insert new account
-		if ($stmt = $con->prepare('INSERT INTO accounts (username, password) VALUES (?, ?)')) {
+		if ($stmt = $con->prepare('INSERT INTO accounts (username, password, superuser) VALUES (?, ?, ?)')) {
 			// We do not want to expose passwords in our database, so hash the password and use password_verify when a user logs in.
 			$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-			$stmt->bind_param('ss', $_POST['username'], $password);
+			$isSuperUser = $_POST['issuperuser'] == "" ? false : true;
+			$stmt->bind_param('ssi', $_POST['username'], $password, $isSuperUser);
 			$stmt->execute();
 			header("Location: index.php?register=success");
 		} else {

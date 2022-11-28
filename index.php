@@ -86,6 +86,7 @@
 					<input type="text" class="input-field" placeholder="Username" name="username" required value=<?php echo $username; ?>>
 					<input type="password" class="input-field" placeholder="Password" name="password" required>
 					<input type="password" class="input-field" placeholder="Repeat Password" name="retypepassword" required>
+					<input type="checkbox" class="check-box" name="issuperuser"><span>Is Superuser</span>
 					<?php if ($type == 'register') echo $message; ?>
 					<input type="submit" class="submit-button" value="Register">
 				</form>

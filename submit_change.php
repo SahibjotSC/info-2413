@@ -22,7 +22,7 @@ if (mysqli_connect_errno()) {
 // Now we check if the data was submitted, isset() function will check if the data exists.
 if (!isset($_POST['type'], $_POST['category'], $_POST['description'], $_POST['value'])) {
 	// Could not get the data that should have been sent.
-	header("Location: home.php?change=incomplete");
+	header("Location: home.php?change=incomplete".$_POST['type']);
 	exit();
 }
 // Make sure the submitted registration values are not empty.
@@ -42,31 +42,15 @@ if ($stmt = $con->prepare('SELECT * FROM categories WHERE name = ?')) {
 	// Store the result so we can check if the account exists in the database.
 	if ($stmt->num_rows > 0) {
 		//category Exists
-		if ($stmttt = $con->prepare('SELECT id FROM accounts WHERE username = ?'))
-		{
-			$stmttt->bind_param('s', $_SESSION['name']);
-			$stmttt->execute();
-			$result = $stmttt->get_result();
-			while($row = $result->fetch_assoc()) {
-				$idk[] = $row['id'];
-			}
-			if ($stmt->num_rows > 0) {
-				if ($stmtt = $con->prepare('INSERT INTO changes (description, value, type, category, accountID) VALUES (?, ?, ?, ?, ?)')) {
-					$stmtt->bind_param('sdsss', $_POST['description'], $_POST['value'], $_POST['type'], $_POST['category'], $idk[0]);
-					$stmtt->execute();
-					header("Location: home.php");
-				}
-				else {
-					header("Location: home.php?change=failed");
-				}
-			} else {
-				header("Location: home.php?change=failed");
-			}
-			$stmtt->close();
-		} else {
+		if ($stmtt = $con->prepare('INSERT INTO changes (description, value, type, category, accountName) VALUES (?, ?, ?, ?, ?)')) {
+			$stmtt->bind_param('sdsss', $_POST['description'], $_POST['value'], $_POST['type'], $_POST['category'], $_SESSION['name']);
+			$stmtt->execute();
+			header("Location: home.php");
+		}
+		else {
 			header("Location: home.php?change=failed");
 		}
-		$stmttt->close();
+		$stmtt->close();
 	} else {
 		header("Location: home.php?change=failed");
 	}
