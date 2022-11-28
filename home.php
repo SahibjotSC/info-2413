@@ -21,24 +21,30 @@ if ($stmt = $con->prepare('SELECT * FROM categories')) {
 	$stmt->close();
 } else header("Location: home.php?error=failed");
 
-if ($stmt = $con->prepare('SELECT * FROM accounts where username = ?')) {
+if ($stmt = $con->prepare('SELECT superuser FROM accounts where username = ?')) {
 	$stmt->bind_param('s', $_SESSION['name']);
 	$stmt->execute();
-	foreach ($stmt->get_result() as $row)
-	{
-		$superuser = $row['superuser'];
-	}
+	$stmt->bind_result($superuser);
+	$stmt->fetch();
 	$stmt->close();
 }
 
 if ($stmt = $con->prepare('SELECT * FROM changes')) {
 	$stmt->execute();
-	$stmt->store_result();
-	if ($superuser == 1 && $stmt->num_rows < 1) {
-		$startBudget = 0;
-	} else $startBudget = 1;
+	$changes = 0;
+	$remaining = 0;
+	foreach ($stmt->get_result() as $changeRow)
+	{
+		if ($changeRow['type'] == "inc") $remaining = $remaining + $changeRow['value'];
+		else if ($changeRow['type'] == "exp") $remaining = $remaining - $changeRow['value'];
+		$changes++;
+	}
 	$stmt->close();
 } else header("Location: home.php?error=failed");
+
+if ($superuser == 1 && $changes < 1) {
+	$startBudget = 0;
+} else $startBudget = 1;
 
 $homeType = '';
 $message = '';
@@ -118,27 +124,30 @@ else if(isset($_GET['change']))
 		<div class="hero">
 			<nav class="navtop">
 				<div>
-					<h1>Website Titlsde</h1>
-					<a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>
+					<h1>Budget Management System</h1>
 					<a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
 				</div>
 			</nav>
 			<div class="content">
 				<h2>Home Page</h2>
-				<p>Welcome back, <?=$_SESSION['name']?>!</p>
+				<p>Welcome back, <?=$_SESSION['name']?>!
+				<?php
+				if ($startBudget == 0) {
+					echo 'Set the initial budget below:';
+				} else if ($superuser == 0 && $changes < 1){
+					echo 'Waiting for super user to start budget...';
+				} else echo 'Remaining budget: $'.$remaining;
+				?>
+				</p>
 				<?php
 				if ($startBudget == 0) {
 					echo ("
 						<div class='add'>
 							<div class='add__container'>
 								<form id='login' action='submit_change.php' method='post'>
-									<select class='hide' name='type'>
-										<option value='inc' selected></option>
-									</select>
-									<select class='hide' name='category'>
-										<option value='None' selected></option>
-									</select>
-									<input type='text' class='hide' name='description' value='Initial Budget'>
+									<input type='hidden' name='type' value='inc'>
+									<input type='hidden' name='category' value='None'>
+									<input type='hidden' name='description' value='Initial Budget'>
 
 									<input type='number' class='add__value' name='value' placeholder='Value' required>
 									<input type='submit' class='add__btn' type='button' value='UPDATE'>
@@ -162,6 +171,7 @@ else if(isset($_GET['change']))
 							<th>Catagory</th>
 							<th>Date Modified</th>
 							<th>User</th>
+							<th>Action</th>
 						</tr>
 						</thead>
 						<tbody>
@@ -194,13 +204,18 @@ else if(isset($_GET['change']))
 							else $typeIcon = "";
 
 							echo("
-							<tr class='file $typeIcon''>
+							<tr class='file $typeIcon'>
 								<td><a class='name hidden $typeIcon'>$typeIcon</a></td>
 								<td><a class='name'>$description[$index]</a></td>
-								<td><a class='name'>$value[$index]</a></td>
+								<td><a class='name'>$$value[$index]</a></td>
 								<td><a class='name'>$category[$index]</a></td>
 								<td><a class='name'>$dateOf[$index]</a></td>
 								<td><a class='name'>$accountName[$index]</a></td>
+								<td><a class='name'>
+									<form action='remove_change.php' method='post'>
+										<button name='changesID' value='$changesID[$index]'>Remove</button>
+									</form>
+								</a></td>
 							</tr>"
 							);
 						}

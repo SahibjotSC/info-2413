@@ -58,7 +58,7 @@
 }
 
 .input-group{
-    top: 180px;
+    top: 150px;
     position: absolute;
     width: 280px;
     transition: .5s;
@@ -90,7 +90,7 @@
 }
 
 .check-box{
-	margin: 15px 10px 30px 0px;
+	margin: 16px 10px 30px 0px;
 }
 
 .error{
@@ -108,8 +108,7 @@
 span{
     color: #777;
     font-size: 12px;
-    bottom: 105px;
-    position: absolute;
+	margin: auto;
 }
 
 #login{
@@ -166,7 +165,7 @@ span{
 	padding: 25px 0;
 	font-size: 22px;
 	border-bottom: 1px solid #e0e0e3;
-	color: #4a536e;
+	color: white;
 }
 .content > p, .content > div {
 	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);

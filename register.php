@@ -12,13 +12,13 @@ if (mysqli_connect_errno()) {
 	exit();
 }
 // Now we check if the data was submitted, isset() function will check if the data exists.
-if (!isset($_POST['username'], $_POST['password'], $_POST['retypepassword'])) {
+if (!isset($_POST['username'], $_POST['password'], $_POST['retypepassword'], $_POST['email'])) {
 	// Could not get the data that should have been sent.
 	header("Location: index.php?register=incomplete");
 	exit();
 }
 // Make sure the submitted registration values are not empty.
-if (empty($_POST['username']) || empty($_POST['password']) || empty($_POST['retypepassword'])) {
+if (empty($_POST['username']) || empty($_POST['password']) || empty($_POST['retypepassword']) || empty($_POST['email'])) {
 	// One or more values are empty.
 	header("Location: index.php?register=empty");
 	exit();
@@ -31,7 +31,7 @@ if ($_POST['password'] != $_POST['retypepassword']) {
 	header("Location: index.php?register=retypepass&username=".$_POST['username']);
 	exit();
 }
-if (strlen($_POST['password']) > 20 || strlen($_POST['password']) < 5) {
+if (strlen($_POST['password']) > 20 || strlen($_POST['password']) < 3) {
 	header("Location: index.php?register=passwordlength&username=".$_POST['username']);
 	exit();
 }
@@ -47,11 +47,11 @@ if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?'
 		header("Location: index.php?register=userexist");
 	} else {
 		// Username doesnt exists, insert new account
-		if ($stmt = $con->prepare('INSERT INTO accounts (username, password, superuser) VALUES (?, ?, ?)')) {
+		if ($stmt = $con->prepare('INSERT INTO accounts (username, email, password, superuser) VALUES (?, ?, ?, ?)')) {
 			// We do not want to expose passwords in our database, so hash the password and use password_verify when a user logs in.
 			$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 			$isSuperUser = $_POST['issuperuser'] == "" ? false : true;
-			$stmt->bind_param('ssi', $_POST['username'], $password, $isSuperUser);
+			$stmt->bind_param('sssi', $_POST['username'], $_POST['email'], $password, $isSuperUser);
 			$stmt->execute();
 			header("Location: index.php?register=success");
 		} else {

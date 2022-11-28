@@ -59,4 +59,37 @@ if ($stmt = $con->prepare('SELECT * FROM categories WHERE name = ?')) {
 	// Something is wrong with the sql statement, check to make sure accounts table exists with all 3 fields.
 	header("Location: home.php?change=failed");
 }
+
+if ($stmt = $con->prepare('SELECT value FROM changes where description = ?')) {
+	$var = 'Initial Budget';
+	$stmt->bind_param('s', $var);
+	$stmt->execute();
+	$stmt->bind_result($initial);
+	$stmt->fetch();
+	$stmt->close();
+}
+
+if ($stmt = $con->prepare('SELECT * FROM changes')) {
+	$stmt->execute();
+	$remaining = 0;
+	foreach ($stmt->get_result() as $changeRow)
+	{
+		if ($changeRow['type'] == "inc") $remaining = $remaining + $changeRow['value'];
+		else if ($changeRow['type'] == "exp") $remaining = $remaining - $changeRow['value'];
+	}
+	$stmt->close();
+}
+
+if ($remaining < $initial * 0.2)
+{
+	if ($stmt = $con->prepare('SELECT * FROM accounts')) {
+		$stmt->execute();
+		foreach ($stmt->get_result() as $emailRow)
+		{
+			$msg = "Initial Funds: ".$initial." Remaining funds: ".$remaining;
+			mail($emailRow['email'],"Low Funds Alert",$msg);
+		}
+		$stmt->close();
+	}
+}
 ?>
