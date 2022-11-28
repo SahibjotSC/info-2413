@@ -10,14 +10,21 @@ $con = mysqli_connect('localhost', 'root', '', 'phplogin');
 if (mysqli_connect_errno()) {
 	exit('Failed to connect to MySQL: ' . mysqli_connect_error());
 }
+
 // We don't have the password or email info stored in sessions so instead we can get the results from the database.
-$stmt = $con->prepare('SELECT password FROM accounts WHERE id = ?');
+$stmt = $con->prepare('SELECT * FROM accounts WHERE id = ?');
+
 // In this case we can use the account ID to get the account info.
+
+
+
 $stmt->bind_param('i', $_SESSION['id']);
 $stmt->execute();
-$stmt->bind_result($password);
+$stmt->bind_result($id, $username, $password, $infoID, $superuser, $email, $phone);
 $stmt->fetch();
 $stmt->close();
+
+
 ?>
 
 <!DOCTYPE html>
@@ -43,27 +50,12 @@ $stmt->close();
 			  <h1>Edit Profile</h1>
 			  <form action="">
 				<fieldset>
+
 				  <div class="grid-35">
-					<label for="fname">First Name</label>
+					<label for="fname">Name</label>
 				  </div>
 				  <div class="grid-65">
-					<input type="text" id="fname" tabindex="1" />
-				  </div>
-				</fieldset>
-				<fieldset>
-				  <div class="grid-35">
-					<label for="lname">Last Name</label>
-				  </div>
-				  <div class="grid-65">
-					<input type="text" id="lname" tabindex="2" />
-				  </div>
-				</fieldset>
-				<fieldset>
-				  <div class="grid-35">
-					<label for="lname">Nickname</label>
-				  </div>
-				  <div class="grid-65">
-					<input type="text" id="lname" tabindex="2" />
+					<input type="text" value ="<?php echo $username; ?>" id="name" tabindex="1" />
 				  </div>
 				</fieldset>
 				<fieldset>
@@ -71,7 +63,7 @@ $stmt->close();
 					<label for="lname">Email</label>
 				  </div>
 				  <div class="grid-65">
-					<input type="text" id="lname" tabindex="2" />
+					<input type="text" value ="<?php echo $email; ?>" id="name" tabindex="1" />
 				  </div>
 				</fieldset>
 				<fieldset>
@@ -79,15 +71,7 @@ $stmt->close();
 					<label for="lname">Phone Number</label>
 				  </div>
 				  <div class="grid-65">
-					<input type="text" id="lname" tabindex="2" />
-				  </div>
-				</fieldset>
-				<fieldset>
-				  <div class="grid-35">
-					<label for="lname">Birthday</label>
-				  </div>
-				  <div class="grid-65">
-					<input type="text" id="lname" tabindex="2" />
+					<input type="text" value ="<?php echo $phone; ?>" id="name" tabindex="1" />
 				  </div>
 				</fieldset>
 				<fieldset>
