@@ -158,6 +158,7 @@ span{
 }
 .content {
 	width: 1000px;
+color #FFFFFF;
 	margin: 0 auto;
 }
 .content h2 {
@@ -259,12 +260,6 @@ span{
     float: left;
     width: 475px;
 }
-
-
-
-
-
-
 
 .round {
   border-radius: 50%;
@@ -520,3 +515,5 @@ tr td a.hidden, tr td.hidden:hover {
 .hidden {
 	color: transparent;
 }
+
+.profile {color: white }
