@@ -125,7 +125,6 @@ else if(isset($_GET['change']))
 			<nav class="navtop">
 				<div>
 					<h1>Budget Management System</h1>
-					<a href="profile.php">Profile</a>
 					<a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
 				</div>
 			</nav>
@@ -150,7 +149,7 @@ else if(isset($_GET['change']))
 									<input type='hidden' name='category' value='None'>
 									<input type='hidden' name='description' value='Initial Budget'>
 
-									<input type='number' class='add__value' name='value' placeholder='Value' required>
+									<input type='number' min='0.00' step='0.01' class='add__value' name='value' placeholder='Value' required>
 									<input type='submit' class='add__btn' type='button' value='Start Budget'>
 								</form>
 							</div>
@@ -228,7 +227,7 @@ else if(isset($_GET['change']))
 				echo "
 				<div class='inner-fabs'>
 					<div class='fab round change-category' id='fab4' data-tooltip='Add Category'><img src='tag.png' width='38px' height='38px'></div>
-					<div class='fab round change-trigger' id='fab3' data-tooltip='Add Income or Expense'><img src='change.png' width='38px' height='38px'></div>
+					<div class='fab round change-trigger' id='fab3' data-tooltip='Add Expense/Income'><img src='change.png' width='38px' height='38px'></div>
 				</div>
 				<div class='fab round' id='fab1'><img src='+.png' id='fabIcon' width='56px' height='56px'></div>
 				";
@@ -276,7 +275,7 @@ else if(isset($_GET['change']))
 									?>
 								</select>
 								<input type="text" class="add__description" name="description" placeholder="Add description" required>
-								<input type="number" class="add__value" name="value" placeholder="Value" required>
+								<input type="number" min='0.00' step='0.01' class="add__value" name="value" placeholder="Value" required>
 								
 								<input type="submit" class="add__btn" type='button' value="Add">
 							</form>
