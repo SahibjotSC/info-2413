@@ -26,6 +26,10 @@ if ($_POST['type'] != 'inc' && $_POST['type'] != 'exp') {
 	header("Location: home.php?change=incorrecttype");
 	exit();
 }
+if ($_POST['value'] < 1) {
+	header("Location: home.php");
+	exit();
+}
 if ($stmt = $con->prepare('SELECT * FROM categories WHERE name = ?')) {
 	$stmt->bind_param('s', $_POST['category']);
 	$stmt->execute();
