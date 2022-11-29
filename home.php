@@ -192,10 +192,6 @@ else if(isset($_GET['change']))
 									$accountName[] = $row['accountName'];
 								}
 							}
-							//header("Location: home.php?error=failed".$indexCount);
-							//$indexCount = 10;
-								
-
 						for($index=0; $index < $indexCount; $index++) {
 							$name=$description[$index];
 							
