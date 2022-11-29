@@ -125,7 +125,6 @@ else if(isset($_GET['change']))
 			<nav class="navtop">
 				<div>
 					<h1>Budget Management System</h1>
-					<a href="profile.php"> </i>Profile</a>
 					<a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
 				</div>
 			</nav>
@@ -151,7 +150,7 @@ else if(isset($_GET['change']))
 									<input type='hidden' name='description' value='Initial Budget'>
 
 									<input type='number' class='add__value' name='value' placeholder='Value' required>
-									<input type='submit' class='add__btn' type='button' value='UPDATE'>
+									<input type='submit' class='add__btn' type='button' value='Start Budget'>
 								</form>
 							</div>
 						</div>
@@ -268,8 +267,8 @@ else if(isset($_GET['change']))
 						<div class="add__container">
 							<form id="login" action="submit_change.php" method="post">
 								<select class="add__type" name="type">
-									<option value="inc" selected>+</option>
-									<option value="exp">-</option>
+									<option value="inc" selected>Income</option>
+									<option value="exp">Expense</option>
 								</select>
 								<select class="add__type" name="category">
 									<?php
@@ -282,7 +281,7 @@ else if(isset($_GET['change']))
 								<input type="text" class="add__description" name="description" placeholder="Add description" required>
 								<input type="number" class="add__value" name="value" placeholder="Value" required>
 								
-								<input type="submit" class="add__btn" type='button' value="UPDATE">
+								<input type="submit" class="add__btn" type='button' value="Add">
 							</form>
 						</div>
 					</div>
@@ -297,7 +296,7 @@ else if(isset($_GET['change']))
 							<form id="login" action="submit_category.php" method="post">
 								<input type="text" class="add__description" name="name" placeholder="Category Name" required>
 								<input type="text" class="add__description" name="description" placeholder="Description">
-								<input type="submit" class="add__btn" type='button' value="ADD CATEGORY">
+								<input type="submit" class="add__btn" type='button' value="Add Category">
 							</form>
 							<form id="login" action="remove_category.php" method="post">
 								<select class="add__type" name="category">
@@ -308,7 +307,7 @@ else if(isset($_GET['change']))
 									}
 									?>
 								</select>
-								<input type="submit" class="add__btn" type='button' value="REMOVE CATEGORY">
+								<input type="submit" class="add__btn" type='button' value="Remove Category">
 							</form>
 						</div>
 					</div>
