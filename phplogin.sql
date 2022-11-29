@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 24, 2022 at 12:33 AM
+-- Generation Time: Nov 29, 2022 at 02:14 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -31,18 +31,18 @@ CREATE TABLE `accounts` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `infoID` int(11) DEFAULT NULL
+  `infoID` int(11) DEFAULT NULL,
+  `superuser` tinyint(1) NOT NULL DEFAULT 0,
+  `email` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `accounts`
 --
 
-INSERT INTO `accounts` (`id`, `username`, `password`, `infoID`) VALUES
-(1, 'test', '$2y$10$SfhYIDtn.iOuCW7zfoFLuuZHX6lja4lF4XA4JqNmpiH/.P3zB8JCa', NULL),
-(2, 'sahhh', '$2y$10$pP3k8A8bNB5q1mQvykcmTextFBBk9ZAGHdoDeLpQH6NT9i.IM7uCC', NULL),
-(3, 'asdfg', '$2y$10$9lSeW0Ecn6Nmxye5irf54eXIm.Qq577F/AhxgWsvzZyRDRsY68Dte', NULL),
-(4, '12345', '$2y$10$LIiC5R.3piwUU2ayEnXt6OF/6qkPYEIVAGTzHYzkFuHt3dBNkMZaG', NULL);
+INSERT INTO `accounts` (`id`, `username`, `password`, `infoID`, `superuser`, `email`) VALUES
+(11, 'super', '$2y$10$W5PyHriNcn/0uO2ixf1wIupqTcQa0CIiNNJOvy02bUrrE3gd/1uYa', NULL, 1, 'super@gmail.com'),
+(12, 'user', '$2y$10$lrEXPmOdQo4j66WZG8Ag0.LAhnV92nnR/9D/stYbxZcv3BI/38RGu', NULL, 0, 'user@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -60,18 +60,12 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`name`, `description`) VALUES
-('CustomCategoryyyyyy', ''),
-('dasd', ''),
-('fdgg', 'gfdgfg'),
-('fds', '2323233232'),
-('fdsfds', ''),
-('fsdfds', '45rfgdsfg'),
-('fsdfsd', '34fesdfds'),
-('gdffdg', 'gfdgfd'),
-('OOOOOOOOOOOOOOOOOOOOOOOOOOOO', ''),
-('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO', ''),
-('rrewrew', 'rewrewrewrew'),
-('z', 'z');
+('Cloth', ''),
+('Entertainment', ''),
+('Food', ''),
+('Medical', ''),
+('Transportation', ''),
+('Utility', '');
 
 -- --------------------------------------------------------
 
@@ -86,24 +80,15 @@ CREATE TABLE `changes` (
   `category` varchar(32) NOT NULL,
   `changesID` int(11) NOT NULL,
   `dateOf` date DEFAULT curdate(),
-  `accountID` int(11) DEFAULT NULL
+  `accountName` varchar(32) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `changes`
 --
 
-INSERT INTO `changes` (`description`, `value`, `type`, `category`, `changesID`, `dateOf`, `accountID`) VALUES
-('das', 34, 'inc', 'z', 15, '2022-11-22', 1),
-('fsdfds', 43, 'inc', 'z', 22, '2022-11-22', 1),
-('fdcfds', 3443, 'inc', 'z', 23, '2022-11-22', 1),
-('dsdaasd', 222, 'inc', 'z', 24, '2022-11-22', 1),
-('faaaaaaaa', 232323, 'inc', 'z', 25, '2022-11-22', 4),
-('TESTTTTTTT', 9999, 'inc', 'CustomCategoryyyyyy', 26, '2022-11-22', 4),
-('dsad', 43434, 'exp', 'dasd', 27, '2022-11-22', 4),
-('dfsfdfsd', 434, 'exp', 'dasd', 28, '2022-11-22', 4),
-('dasdasdasd', 1343, 'inc', 'OOOOOOOOOOOOOOOOOOOOOOOOOOOO', 29, '2022-11-22', 4),
-('fsdf', 4, 'inc', 'OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO', 30, '2022-11-22', 4);
+INSERT INTO `changes` (`description`, `value`, `type`, `category`, `changesID`, `dateOf`, `accountName`) VALUES
+('Initial Budget', 123, 'inc', 'None', 48, '2022-11-28', 'sah');
 
 -- --------------------------------------------------------
 
@@ -143,8 +128,7 @@ ALTER TABLE `categories`
 --
 ALTER TABLE `changes`
   ADD PRIMARY KEY (`changesID`),
-  ADD KEY `catagory` (`category`),
-  ADD KEY `accountIDFK` (`accountID`);
+  ADD KEY `catagory` (`category`);
 
 --
 -- Indexes for table `personal_information`
@@ -160,13 +144,13 @@ ALTER TABLE `personal_information`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `changes`
 --
 ALTER TABLE `changes`
-  MODIFY `changesID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `changesID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `personal_information`
@@ -183,12 +167,6 @@ ALTER TABLE `personal_information`
 --
 ALTER TABLE `accounts`
   ADD CONSTRAINT `infoIDPK` FOREIGN KEY (`infoID`) REFERENCES `personal_information` (`infoID`);
-
---
--- Constraints for table `changes`
---
-ALTER TABLE `changes`
-  ADD CONSTRAINT `accountIDFK` FOREIGN KEY (`accountID`) REFERENCES `accounts` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
