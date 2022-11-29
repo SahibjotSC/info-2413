@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 29, 2022 at 02:21 AM
--- Server version: 10.4.25-MariaDB
--- PHP Version: 8.1.10
+-- Generation Time: Nov 29, 2022 at 06:54 AM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,16 +33,17 @@ CREATE TABLE `accounts` (
   `password` varchar(255) NOT NULL,
   `infoID` int(11) DEFAULT NULL,
   `superuser` tinyint(1) NOT NULL DEFAULT 0,
-  `email` varchar(64) NOT NULL
+  `email` varchar(64) NOT NULL,
+  `phone` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `accounts`
 --
 
-INSERT INTO `accounts` (`id`, `username`, `password`, `infoID`, `superuser`, `email`) VALUES
-(11, 'super', '$2y$10$W5PyHriNcn/0uO2ixf1wIupqTcQa0CIiNNJOvy02bUrrE3gd/1uYa', NULL, 1, 'super@gmail.com'),
-(12, 'user', '$2y$10$lrEXPmOdQo4j66WZG8Ag0.LAhnV92nnR/9D/stYbxZcv3BI/38RGu', NULL, 0, 'user@gmail.com');
+INSERT INTO `accounts` (`id`, `username`, `password`, `infoID`, `superuser`, `email`, `phone`) VALUES
+(11, 'super', '$2y$10$W5PyHriNcn/0uO2ixf1wIupqTcQa0CIiNNJOvy02bUrrE3gd/1uYa', NULL, 1, 'super@gmail.com', NULL),
+(12, 'user', '$2y$10$lrEXPmOdQo4j66WZG8Ag0.LAhnV92nnR/9D/stYbxZcv3BI/38RGu', NULL, 0, 'user@gmail.com', NULL);
 
 -- --------------------------------------------------------
 
@@ -138,13 +139,13 @@ ALTER TABLE `personal_information`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `changes`
 --
 ALTER TABLE `changes`
-  MODIFY `changesID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `changesID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `personal_information`
