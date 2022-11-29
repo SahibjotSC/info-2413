@@ -1,5 +1,7 @@
 <?php
+// We need to use sessions, so you should always start sessions using the below code.
 session_start();
+// If the user is not logged in redirect to the login page...
 if (!isset($_SESSION['loggedin'])) {
 	header('Location: index.php');
 	exit;
@@ -8,12 +10,21 @@ $con = mysqli_connect('localhost', 'root', '', 'phplogin');
 if (mysqli_connect_errno()) {
 	exit('Failed to connect to MySQL: ' . mysqli_connect_error());
 }
-$stmt = $con->prepare('SELECT password FROM accounts WHERE id = ?');
+
+// We don't have the password or email info stored in sessions so instead we can get the results from the database.
+$stmt = $con->prepare('SELECT * FROM accounts WHERE id = ?');
+
+// In this case we can use the account ID to get the account info.
+
+
+
 $stmt->bind_param('i', $_SESSION['id']);
 $stmt->execute();
-$stmt->bind_result($password);
+$stmt->bind_result($id, $username, $password, $infoID, $superuser, $email, $phone);
 $stmt->fetch();
 $stmt->close();
+
+
 ?>
 
 <!DOCTYPE html>
@@ -26,65 +37,41 @@ $stmt->close();
 	</head>
 	<body class="loggedin">
 	<div class="hero">
-	<div class="content">
 		<nav class="navtop">
 			<div>
-				<h1>Budget Management System</h1>
+				<h1>Website Title</h1>
 				<a href="home.php"><i class="fas fa-user-circle"></i>Home</a>
 				<a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
 			</div>
 		</nav>
-		<div class="">
+		<div class="wrapper">
 			<div class="profile">
 			<div class="content">
 			  <h1>Edit Profile</h1>
 			  <form action="">
 				<fieldset>
-				  <div>
-					<label for="fname">First Name</label>
+
+				  <div class="grid-35">
+					<label for="fname">Name</label>
 				  </div>
-				  <div>
-					<input type="text" id="fname" tabindex="1" />
-				  </div>
-				</fieldset>
-				<fieldset>
-				  <div>
-					<label for="lname">Last Name</label>
-				  </div>
-				  <div>
-					<input type="text" id="lname" tabindex="2" />
+				  <div class="grid-65">
+					<input type="text" value ="<?php echo $username; ?>" id="name" tabindex="1" />
 				  </div>
 				</fieldset>
 				<fieldset>
-				  <div>
-					<label for="lname">Nickname</label>
-				  </div>
-				  <div>
-					<input type="text" id="lname" tabindex="2" />
-				  </div>
-				</fieldset>
-				<fieldset>
-				  <div>
+				  <div class="grid-35">
 					<label for="lname">Email</label>
 				  </div>
-				  <div>
-					<input type="text" id="lname" tabindex="2" />
+				  <div class="grid-65">
+					<input type="text" value ="<?php echo $email; ?>" id="name" tabindex="1" />
 				  </div>
 				</fieldset>
 				<fieldset>
-				  <div>
+				  <div class="grid-35">
 					<label for="lname">Phone Number</label>
 				  </div>
-				  <div>
-					<input type="text" id="lname" tabindex="2" />
-				  </div>
-				</fieldset>
-				<fieldset>
-				  <div>
-					<label for="lname">Birthday</label>
-				  </div>
-				  <div>
-					<input type="text" id="lname" tabindex="2" />
+				  <div class="grid-65">
+					<input type="text" value ="<?php echo $phone; ?>" id="name" tabindex="1" />
 				  </div>
 				</fieldset>
 				<fieldset>
@@ -93,7 +80,6 @@ $stmt->close();
 				</fieldset>
 
 			  </form>
-			</div>
 			</div>
 			</div>
 			</div>
