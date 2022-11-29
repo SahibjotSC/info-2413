@@ -64,9 +64,9 @@ if(isset($_GET['category']))
 	{
 		$message = '<h6 class="error">*Please input all required values</h6>';
 	}
-	else if ($_GET['category'] == 'catagrydoesexist')
+	else if ($_GET['category'] == 'categrydoesexist')
 	{
-		$message = '<h6 class="error">*Catagory does not exist</h6>';
+		$message = '<h6 class="error">*Category does not exist</h6>';
 	}
 	else if ($_GET['category'] == 'failed')
 	{
@@ -119,6 +119,55 @@ else if(isset($_GET['change']))
 		<link rel="stylesheet" href="style.css">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 		<script src="sorttable.js"></script>
+<script>
+window.onload = function () {
+	
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	backgroundColor: "white",
+<?php 
+?>	
+	title:{
+		text:"Current Monthly Spending",
+		fontFamily: "default"
+	},
+	axisX:{
+		interval: 1
+	},
+	axisY2:{
+		interlacedColor: "rgba(1,77,101,.2)",
+		gridColor: "rgba(1,77,101,.1)",
+		title: "Amount ($)"
+	},
+	data: [{
+		//theme: "light2",
+		type: "bar",
+		name: "Categories",
+		axisYType: "secondary",
+		dataPoints: [
+			
+<?php
+$action = "SELECT * FROM changes";
+$results=mysqli_query($con,$action);
+$row_count=mysqli_num_rows($results);
+//$row_users = mysqli_fetch_array($results, MYSQL_NUM);
+
+#echo "{";
+    for ($i=0; $i<$row_count; $i++){
+		$row_users = mysqli_fetch_array($results);
+		
+	echo "{y: " . $row_users['value'] . " , label: '" .$row_users['category'] . "'}"; 
+    if ($i < $row_count){
+		echo ",";
+	}
+	}
+?>]
+	}]
+});
+chart.render();
+
+}
+</script>
 	</head>
 	<body>
 		<div class="hero">
@@ -137,6 +186,7 @@ else if(isset($_GET['change']))
 					echo 'Set the initial budget below:';
 				} else if ($superuser == 0 && $changes < 1){
 					echo 'Waiting for super user to start budget...';
+
 				} else echo 'Remaining budget: $'.$remaining;
 				?>
 				</p>
@@ -342,5 +392,7 @@ else if(isset($_GET['change']))
 		if ($homeType == 'change') echo '<script type="text/javascript"> toggleChange(); </script>';
 		else if ($homeType == 'category') echo '<script type="text/javascript"> toggleCategory(); </script>';
 		?>
+		<div id="chartContainer" style="height: 150px; width: 50%;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 	</body>
 </html>
