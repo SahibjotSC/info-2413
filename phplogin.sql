@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 29, 2022 at 02:14 AM
+-- Generation Time: Nov 29, 2022 at 02:15 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -82,13 +82,6 @@ CREATE TABLE `changes` (
   `dateOf` date DEFAULT curdate(),
   `accountName` varchar(32) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `changes`
---
-
-INSERT INTO `changes` (`description`, `value`, `type`, `category`, `changesID`, `dateOf`, `accountName`) VALUES
-('Initial Budget', 123, 'inc', 'None', 48, '2022-11-28', 'sah');
 
 -- --------------------------------------------------------
 
