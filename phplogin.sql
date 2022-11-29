@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 29, 2022 at 02:15 AM
+-- Generation Time: Nov 29, 2022 at 02:21 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -64,6 +64,7 @@ INSERT INTO `categories` (`name`, `description`) VALUES
 ('Entertainment', ''),
 ('Food', ''),
 ('Medical', ''),
+('None', ''),
 ('Transportation', ''),
 ('Utility', '');
 
@@ -143,7 +144,7 @@ ALTER TABLE `accounts`
 -- AUTO_INCREMENT for table `changes`
 --
 ALTER TABLE `changes`
-  MODIFY `changesID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `changesID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `personal_information`
