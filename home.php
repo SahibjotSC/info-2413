@@ -134,6 +134,7 @@ var chart = new CanvasJS.Chart("chartContainer", {
 	axisX:{
 		interval: 1
 	},
+	
 	axisY2:{
 		interlacedColor: "rgba(1,77,101,.2)",
 		gridColor: "rgba(1,77,101,.1)",
@@ -186,6 +187,7 @@ chart.render();
 					echo 'Set the initial budget below:';
 				} else if ($superuser == 0 && $changes < 1){
 					echo 'Waiting for super user to start budget...';
+	                include 'email.php';
 
 				} else echo 'Remaining budget: $'.$remaining;
 				?>
